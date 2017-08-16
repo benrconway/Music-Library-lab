@@ -33,6 +33,11 @@ class Artist
     return albums_by_artist
   end
 
+  def update()
+    sql = "UPDATE artists SET (name) = ($1) WHERE id = $2;"
+    SqlRunner.run(sql, [@name,@id])
+  end
+
   def Artist.delete_all()
     sql = "DELETE FROM artists;"
     SqlRunner.run(sql)
