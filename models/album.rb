@@ -1,4 +1,4 @@
-require_relative("../sql_runner.rb")
+require_relative("../db/sql_runner.rb")
 
 class Album
 
@@ -10,6 +10,17 @@ class Album
     @title = album_details["title"]
     @genre = album_details["genre"]
     @artist_id = album_details["artist_id"]
+  end
+
+  def save()
+    sql = "
+      INSERT INTO albums (title, genre, artist_id)
+      VALUES ($1, $2, $3) RETURNING id;
+    "
+    values = [@title, @genre, @artist_id]
+    pg_result = SqlRunner.run(sql, values)
+    album_hash = pg_result.map() { |album_hash| Album.new(album_hash)}
+    @id = album_hash[0].id.to_i()
   end
 
 end
