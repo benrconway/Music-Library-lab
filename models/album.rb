@@ -23,4 +23,27 @@ class Album
     @id = album_hash[0].id.to_i()
   end
 
+  def Album.all()
+    sql = "SELECT * FROM albums;"
+    pg_result = SqlRunner.run(sql)
+    album_list = pg_result.map() { |album_hash| Album.new(album_hash)}
+    return album_list
+  end
+
+  def artist()
+    sql = "SELECT * FROM artists WHERE id = $1;"
+    pg_result = SqlRunner.run(sql, [@artist_id])
+    albums_by_artist = pg_result.map() {|artist_info| Artist.new(artist_info)}
+    return albums_by_artist
+  end
+
+  def Album.delete_all()
+    sql = "DELETE FROM albums;"
+    SqlRunner.run(sql)
+  end
+
+  def delete()
+    sql = "DELETE FROM albums WHERE id = $1"
+    SqlRunner.run(sql, [@id])
+  end
 end
