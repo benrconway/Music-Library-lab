@@ -43,5 +43,10 @@ class Artist
     SqlRunner.run(sql, [@id])
   end
 
-  
+  def Artist.find_by_id(id)
+    sql = "SELECT * FROM artists WHERE id = $1"
+    pg_result = SqlRunner.run(sql, [id])
+    artist = pg_result.map() {|artist_info| Artist.new(artist_info)}
+    return artist
+  end
 end

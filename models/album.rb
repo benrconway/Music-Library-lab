@@ -43,7 +43,14 @@ class Album
   end
 
   def delete()
-    sql = "DELETE FROM albums WHERE id = $1"
+    sql = "DELETE FROM albums WHERE id = $1;"
     SqlRunner.run(sql, [@id])
+  end
+
+  def Album.find_by_id(id)
+    sql = "SELECT * FROM albums WHERE id = $1;"
+    pg_result = SqlRunner.run(sql, [id])
+    album = pg_result.map() {|album_info| Album.new(album_info)}
+    return album
   end
 end
